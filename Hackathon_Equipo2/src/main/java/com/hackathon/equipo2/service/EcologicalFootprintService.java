@@ -18,19 +18,8 @@ public class EcologicalFootprintService {
 		return ecologicalFootprintDAO.findAll();
 	}
 
-	/*
-	 * public Country saveCountry(Country Country) { return
-	 * CountryDAO.save(Country); }
-	 */
-
 	public EcologicalFootprint countryByName(String country) {
 		return ecologicalFootprintDAO.findById(country).get();
 	}
-	/*
-	 * public Country updateCountry(Country Country) { return
-	 * CountryrDAO.save(Country); }
-	 * 
-	 * public void deleteCountry(String Country) { CountryDAO.deleteById(Country); }
-	 */
 }
 
