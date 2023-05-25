@@ -123,7 +123,6 @@ header{
 .two-forms{
     display: flex;
     gap: 10px;
-    flex-direction: column;
 }
 .input-field{
     font-size: 15px;
@@ -238,4 +237,16 @@ header{
         flex-direction: column;
         gap: 0;
     }
+}
+
+
+
+
+option{
+    color: black;
+    
+}
+
+select{
+    padding-left:10px;
 }
