@@ -1,6 +1,6 @@
 
 import './App.css';
-import LandingPage from './landingPage';
+import Graph from './graph';
 
 function App() {
   return (
@@ -8,7 +8,7 @@ function App() {
       <header className="header">
       </header>
       <div className='body'>
-      <LandingPage/>
+      <Graph/>
       </div>
     </div>
   );
