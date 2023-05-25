@@ -1,0 +1,157 @@
+package com.hackathon_version2.controllers;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
+import org.json.JSONObject;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+//usando token personalizado
+
+@RestController
+public class ControllerDB {
+
+	@CrossOrigin(origins = "http://127.0.0.1:5500")
+	@PostMapping("/login")
+	public ResponseEntity<String> ejemplo(@RequestBody String mensaje) {
+		
+		
+		String token_inicial="token_inicial";
+		String token_confirmacion="";
+		
+		
+
+		System.out.println("Mensaje recibido desde el cliente: " + mensaje);
+
+		JSONObject jsonObject = new JSONObject(mensaje);
+
+		String page_request = jsonObject.getString("page_request");
+		String user_token= jsonObject.getString("user_token_db");
+		String roles = "Estandar";
+
+		String response = "0";
+
+		DriverManagerDataSource dataSource = new DriverManagerDataSource();
+
+		dataSource.setUrl("jdbc:mysql://10.49.36.57:3306/final_hackaton");
+		dataSource.setUsername("remote");
+		dataSource.setPassword("remote");
+
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+
+		System.out.println(page_request);
+
+		
+		JSONObject json = new JSONObject();
+		
+
+		if (page_request.equals("register")) {
+			String username_register = jsonObject.getString("username_db");//country
+			String user_password_register = jsonObject.getString("user_password_db");//region
+
+			String sql_email_register = "SELECT COUNT(*) FROM ecological_footprint WHERE Country = ?";
+			int count_email_register = jdbcTemplate.queryForObject(sql_email_register, Integer.class, username_register);
+
+			if (count_email_register > 0) {
+				System.out.println("El email " + username_register + " ya existe en la tabla usuarios");
+				//response = "este email ya esta registrado";
+				json.put("response", "este email ya esta registrado");
+				response = json.toString();
+			} else {
+				
+				try {
+		            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+		            byte[] encodedHash = digest.digest(username_register.getBytes(StandardCharsets.UTF_8));
+
+		            // hash to hex
+		            StringBuilder hexString = new StringBuilder();
+		            for (byte b : encodedHash) {
+		                String hex = Integer.toHexString(0xff & b);
+		                if (hex.length() == 1) {
+		                    hexString.append('0');
+		                }
+		                hexString.append(hex);
+		            }
+
+		            token_inicial=hexString.toString();
+		        } catch (NoSuchAlgorithmException e) {
+		            // Excepciones
+		            e.printStackTrace();
+		        }
+				
+				
+				
+				System.out.println("El email " + username_register + " no existe en la tabla usuarios");
+				String sql_registro = "INSERT INTO ecological_footprint (Country, Region) VALUES (?, ?)";
+				jdbcTemplate.update(sql_registro, username_register, user_password_register);
+				//response = "registro exitoso";
+				json.put("response", "registro exitoso");
+				response = json.toString();
+			}
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		if (page_request.equals("editar")) {
+			String username_editar = jsonObject.getString("username_db");
+			String user_password_editar = jsonObject.getString("user_password_db");
+			String id_editar = jsonObject.getString("id_db");
+
+			
+			
+			try {
+	            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+	            byte[] encodedHash = digest.digest(id_editar.getBytes(StandardCharsets.UTF_8));
+
+	            // hash to hex
+	            StringBuilder hexString = new StringBuilder();
+	            for (byte b : encodedHash) {
+	                String hex = Integer.toHexString(0xff & b);
+	                if (hex.length() == 1) {
+	                    hexString.append('0');
+	                }
+	                hexString.append(hex);
+	            }
+
+	            token_confirmacion=hexString.toString();
+	        } catch (NoSuchAlgorithmException e) {
+	            // Excepciones
+	            e.printStackTrace();
+	        }
+			
+			if (token_confirmacion.equals(user_token))
+			{
+				String sql_editar = "UPDATE ecological_footprint SET Region=? WHERE Country=?";
+				jdbcTemplate.update(sql_editar,user_password_editar, username_editar);
+
+				json.put("response", "cambio exitoso");
+				response = json.toString();
+				System.out.println("cambio exitoso");
+				
+			}
+			
+		}
+		
+		
+
+		System.out.println(response);
+		return ResponseEntity.ok(response);
+	}
+}
