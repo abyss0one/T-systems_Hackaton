@@ -22,7 +22,7 @@ public class EcologicalFootprint {
 	private Float Biocapacity_Deficit_or_Reserve;
 	private Float Earths_Required;
 	private Float Countries_Required;
-	private Float Data_Quality;
+	private String Data_Quality;
 	
 	//Constructor
 	
@@ -33,7 +33,7 @@ public class EcologicalFootprint {
 			Float cropland_Footprint, Float grazing_Footprint, Float forest_Footprint, Float carbon_Footprint,
 			Float fish_Footprint, Float total_Ecological_Footprint, Float cropland, Float grazing_Land,
 			Float forest_Land, Float fishing_Water, Float urban_Land, Float total_Biocapacity,
-			Float biocapacity_Deficit_or_Reserve, Float earths_Required, Float countries_Required, Float data_Quality) {
+			Float biocapacity_Deficit_or_Reserve, Float earths_Required, Float countries_Required, String data_Quality) {
 		Country = country;
 		Region = region;
 		Population = population;
@@ -180,10 +180,10 @@ public class EcologicalFootprint {
 	public void setCountries_Required(Float countries_Required) {
 		Countries_Required = countries_Required;
 	}
-	public Float getData_Quality() {
+	public String getData_Quality() {
 		return Data_Quality;
 	}
-	public void setData_Quality(Float data_Quality) {
+	public void setData_Quality(String data_Quality) {
 		Data_Quality = data_Quality;
 	}
 	
