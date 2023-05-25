@@ -1,44 +1,36 @@
 package com.hackathon.equipo2.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.List;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hackathon.equipo2.dao.IUsuarioDAO;
-import com.hackathon.equipo2.dto.Usuario;
+import com.hackathon.equipo2.dao.EcologicalFootprintDAO;
+import com.hackathon.equipo2.dto.EcologicalFootprint;
 
 @Service
 public class EcologicalFootprintService {
 
 	@Autowired
-	EcologicalFootprintDAO EcologicalFootprintDAO;
+	EcologicalFootprintDAO ecologicalFootprintDAO;
 
-	public List<Country> listCountry() {
-		return CountryDAO.findAll();
+	public List<EcologicalFootprint> listCountry() {
+		return ecologicalFootprintDAO.findAll();
 	}
 
-	public Country saveCountry(Country Country) {
-		return CountryDAO.save(Country);
-	}
+	/*
+	 * public Country saveCountry(Country Country) { return
+	 * CountryDAO.save(Country); }
+	 */
 
-	public Country CountryById(String Country {
-		return CountryDAO.findById(Country).get();
+	public EcologicalFootprint countryByName(String country) {
+		return ecologicalFootprintDAO.findById(country).get();
 	}
-
-	public Country updateCountry(Country Country) {
-		return CountryrDAO.save(Country);
-	}
-
-	public void deleteCountry(String Country) {
-		CountryDAO.deleteById(Country);
-	}
+	/*
+	 * public Country updateCountry(Country Country) { return
+	 * CountryrDAO.save(Country); }
+	 * 
+	 * public void deleteCountry(String Country) { CountryDAO.deleteById(Country); }
+	 */
 }
 
